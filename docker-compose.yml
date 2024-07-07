@@ -11,6 +11,15 @@ services:
     depends_on:
       - web  # Ensure 'web' service starts before 'nginx'
 
+  db:
+    image: postgres:latest
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: mydatabase
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+
   web:
     build: .
     command: gunicorn NurliKelajakMaktab.wsgi:application --bind 0.0.0.0:8000
@@ -24,15 +33,6 @@ services:
       - DJANGO_SETTINGS_MODULE=NurliKelajakMaktab.settings
     depends_on:
       - db  # Ensure 'db' service starts before 'web'
-
-  db:
-    image: postgres:latest
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    environment:
-      POSTGRES_DB: mydatabase
-      POSTGRES_USER: myuser
-      POSTGRES_PASSWORD: mypassword
 
 volumes:
   postgres_data:  # Volume for PostgreSQL data persistence
