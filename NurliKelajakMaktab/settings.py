@@ -87,12 +87,12 @@ WSGI_APPLICATION = 'NurliKelajakMaktab.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',  # Database engine for PostgreSQL
-        'NAME': os.getenv('POSTGRES_DB'),  # Name of your PostgreSQL database
-        'USER': os.getenv('POSTGRES_USER'),  # PostgreSQL username
-        'PASSWORD': os.getenv('POSTGRES_PASSWORD'),  # PostgreSQL password
-        'HOST': 'db',  # Hostname of the PostgreSQL container (from Docker Compose)
-        'PORT': 5432,  # PostgreSQL port
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'mydatabase',
+        'USER': 'myuser',
+        'PASSWORD': 'mypassword',
+        'HOST': 'db',
+        'PORT': 5432,
     }
 }
 
