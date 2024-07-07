@@ -26,7 +26,7 @@ services:
       - db  # Ensure 'db' service starts before 'web'
 
   db:
-    image: postgres:13
+    image: postgres:latest
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
