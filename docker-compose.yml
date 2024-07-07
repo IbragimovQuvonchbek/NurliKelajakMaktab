@@ -12,14 +12,14 @@ services:
 
   web:
     build: .
-    command: gunicorn myproject.wsgi:application --bind 0.0.0.0:8000
+    command: gunicorn NurliKelajakMaktab.wsgi:application --bind 0.0.0.0:8000
     volumes:
       - .:/app
       - static_volume:/app/static
       - media_volume:/app/media
     environment:
       - DEBUG=0
-      - DJANGO_SETTINGS_MODULE=myproject.settings
+      - DJANGO_SETTINGS_MODULE=NurliKelajakMaktab.settings
     env_file:
       - .env
     depends_on:
