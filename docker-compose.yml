@@ -37,6 +37,6 @@ services:
       - db  # Ensure 'db' service starts before 'web'
 
 volumes:
-  postgres_data:  # Volume for PostgreSQL data persistence
-  static_volume:  # Volume for static files
+  postgres_data:
+  static_volume:
   media_volume:
