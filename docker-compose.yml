@@ -8,20 +8,20 @@ services:
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf  # Mount your nginx.conf file
       - static_volume:/app/static  # Mount static files for Nginx
-      - media_volume:/app/media
+      - media_volume:/app/media  # Mount media files for Nginx
     depends_on:
       - web  # Ensure 'web' service starts before 'nginx'
 
   db:
     image: postgres:latest
+    ports:
+      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: mydatabase
       POSTGRES_USER: myuser
       POSTGRES_PASSWORD: mypassword
-    ports:
-      - 5432:5432
 
   web:
     build: .
@@ -29,6 +29,7 @@ services:
     volumes:
       - .:/app  # Mount the entire application directory
       - static_volume:/app/static  # Mount static files for Django
+      - media_volume:/app/media  # Mount media files for Django
     ports:
       - "8000:8000"
     environment:
@@ -38,6 +39,6 @@ services:
       - db  # Ensure 'db' service starts before 'web'
 
 volumes:
-  postgres_data:
-  static_volume:
-  media_volume:
+  postgres_data:  # Volume for PostgreSQL data persistence
+  static_volume:  # Volume for static files
+  media_volume:   # Volume for media files
