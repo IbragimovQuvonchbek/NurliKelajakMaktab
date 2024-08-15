@@ -38,8 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'corsheaders',
+    'rest_framework',
 
     'students.apps.StudentsConfig',
+    'olympia.apps.OlympiaConfig',
 ]
 
 MIDDLEWARE = [

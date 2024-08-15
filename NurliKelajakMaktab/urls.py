@@ -21,6 +21,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('', admin.site.urls),
+    path('/api/v1/olimpiada25082024/'),
 ]
 
 if settings.DEBUG:
