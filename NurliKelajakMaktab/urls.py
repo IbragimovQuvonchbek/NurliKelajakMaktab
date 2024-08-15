@@ -59,7 +59,7 @@ class ExportAllDataView(View):
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('', admin.site.urls),
     path('api/v1/olimpiada25082024/', include('olympia.urls')),
     path('export-all-data/', ExportAllDataView.as_view(), name='export-all-data'),
 ]
