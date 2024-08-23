@@ -22,7 +22,7 @@ class Results(models.Model):
     name = models.CharField(verbose_name="Ism Familiya", max_length=255, blank=False, null=False)
     test = models.ForeignKey(Tests, on_delete=models.CASCADE, verbose_name="Test Nomi")
     telegram_id = models.CharField(verbose_name="Telegram Id", max_length=255, blank=False, null=False)
-    test_solutions = models.TextField(verbose_name="Javoblar", blank=False, null=False)
+    test_solutions = models.TextField(verbose_name="Javoblar")
     result = models.SmallIntegerField(blank=False, null=False)
 
     def __str__(self):
