@@ -1,7 +1,9 @@
+from importlib.resources import files
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import Tests, Results
-from .serializers import TestSerializer
+from .models import Tests, Results, TestFile
+from .serializers import TestSerializer, TestFileSerializer
 from rest_framework import status
 
 
@@ -14,10 +16,20 @@ class GetAllTestsAPI(APIView):
 
 class GetTestByIdAPI(APIView):
     def get(self, request, pk):
-        tests_custom = Tests.objects.all()
-        filtered_test = tests_custom.filter(id=pk)
-        ser = TestSerializer(filtered_test, many=True)
-        return Response(ser.data, status=status.HTTP_200_OK)
+        try:
+            filtered_test = Tests.objects.get(id=pk)
+        except Tests.DoesNotExist:
+            return Response({"detail": "Test not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        filtered_test_file = TestFile.objects.filter(test=filtered_test)
+
+        ser1 = TestSerializer(filtered_test)
+        ser2 = TestFileSerializer(filtered_test_file, many=True)
+
+        return Response({
+            "test": ser1.data,
+            "test_files": ser2.data
+        }, status=status.HTTP_200_OK)
 
 
 class CheckUserSolvedAPI(APIView):
@@ -79,4 +91,36 @@ class CheckTestByIdAPI(APIView):
         new_result.save()
 
         return Response({"result": correct_answer, "question_quantity": actual_ans_len},
+                        status=status.HTTP_201_CREATED)
+
+
+class GetTestFileByIDAPI(APIView):
+    def get(self, request, pk):
+        tests_custom = TestFile.objects.all()
+        filtered_test = tests_custom.filter(id=pk)
+        ser = TestFileSerializer(filtered_test, many=True)
+        return Response(ser.data, status=status.HTTP_200_OK)
+
+
+class AddTestFileAPI(APIView):
+    def post(self, request):
+        test_id = request.data.get('test_id')
+        file_id = request.data.get('file_id')
+
+        if not test_id or not file_id:
+            return Response({"error": "All fields (file_id, test_id) are required."},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            specific_test = Tests.objects.get(id=test_id)
+        except Tests.DoesNotExist:
+            return Response({"error": "Test not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        new_testfile = TestFile(
+            test=specific_test,
+            file_id=file_id
+        )
+        new_testfile.save()
+
+        return Response({"status": "created"},
                         status=status.HTTP_201_CREATED)

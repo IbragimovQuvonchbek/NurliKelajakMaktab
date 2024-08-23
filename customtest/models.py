@@ -1,5 +1,3 @@
-from logging import fatal
-
 from django.db import models
 
 
@@ -29,3 +27,12 @@ class Results(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.test.test_name}"
+
+
+class TestFile(models.Model):
+    class Meta:
+        verbose_name = "Test Fayl"
+        verbose_name_plural = "Test Fayllari"
+
+    test = models.ForeignKey(Tests, on_delete=models.CASCADE, verbose_name="Test Nomi")
+    file_id = models.TextField(blank=False, null=False, verbose_name="Fayl id")
