@@ -33,7 +33,8 @@ class CheckUserSolvedAPI(APIView):
             # Assuming you want to return the result from the first match
             user_result = filtered_result_test.first().result
             question_quantity = filtered_result_test.first().test.question_quantity
-            return Response({"solved": True, "result": user_result, "question_quantity": question_quantity}, status=status.HTTP_200_OK)
+            return Response({"solved": True, "result": user_result, "question_quantity": question_quantity},
+                            status=status.HTTP_200_OK)
 
         return Response({"solved": False}, status=status.HTTP_200_OK)
 
@@ -55,47 +56,27 @@ class CheckTestByIdAPI(APIView):
         except Tests.DoesNotExist:
             return Response({"error": "Test not found."}, status=status.HTTP_404_NOT_FOUND)
 
-        # Create a dictionary of correct answers
-        specific_test_ans = specific_test.answers.split('\n')
-        answer_dict = {}
-        for ans in specific_test_ans:
-            split_two = ans.split('.')
-            if len(split_two) == 2:
-                answer_dict[split_two[0].strip()] = split_two[1].strip().lower()
+        specific_test_ans = list(specific_test.answers)
 
-        # Process user input and check for multiple or duplicate answers
-        user_solution = test_solutions.split('\n')
-        unique_solutions = {}
-        incorrect_questions = set()
+        user_solution = list(test_solutions)
 
-        for user_ans in user_solution:
-            split_two = user_ans.split('.')
-            if len(split_two) == 2:
-                question_num = split_two[0].strip()
-                user_ans_text = split_two[1].strip().lower()
-
-                # If the question has already been answered, mark it as incorrect
-                if question_num in unique_solutions:
-                    incorrect_questions.add(question_num)
-                else:
-                    unique_solutions[question_num] = user_ans_text
-
-        # Calculate the number of correct answers
         correct_answer = 0
-        for question_num, user_ans_text in unique_solutions.items():
-            if question_num not in incorrect_questions and answer_dict.get(question_num) == user_ans_text:
+        actual_ans_len = len(specific_test_ans)
+        user_solution_len = len(user_solution)
+        for i in range(actual_ans_len):
+            if user_solution_len <= i:
+                break
+            elif user_solution[i] == specific_test_ans[i]:
                 correct_answer += 1
-            else:
-                incorrect_questions.add(question_num)  # Mark the question as incorrect if answers don't match
 
-        # Create and save the result
         new_result = Results(
             name=name,
             test=specific_test,
             telegram_id=telegram_id,
-            test_solutions='\n'.join([f"{k}.{v}" for k, v in unique_solutions.items()]),
+            test_solutions=test_solutions,
             result=correct_answer
         )
         new_result.save()
 
-        return Response({"result": correct_answer, "question_quantity": len(answer_dict)}, status=status.HTTP_201_CREATED)
+        return Response({"result": correct_answer, "question_quantity": actual_ans_len},
+                        status=status.HTTP_201_CREATED)
