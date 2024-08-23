@@ -36,3 +36,6 @@ class TestFile(models.Model):
 
     test = models.ForeignKey(Tests, on_delete=models.CASCADE, verbose_name="Test Nomi")
     file_id = models.TextField(blank=False, null=False, verbose_name="Fayl id")
+
+    def __str__(self):
+        return self.test.test_name
