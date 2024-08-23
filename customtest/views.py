@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from .models import Tests, Results, TestFile
 from .serializers import TestSerializer, TestFileSerializer
 from rest_framework import status
-
+from django.db import transaction
 
 class GetAllTestsAPI(APIView):
     def get(self, request):
@@ -116,11 +116,15 @@ class AddTestFileAPI(APIView):
         except Tests.DoesNotExist:
             return Response({"error": "Test not found."}, status=status.HTTP_404_NOT_FOUND)
 
-        new_testfile = TestFile(
-            test=specific_test,
-            file_id=file_id
-        )
-        new_testfile.save()
+        try:
+            with transaction.atomic():
+                new_testfile = TestFile(
+                    test=specific_test,
+                    file_id=file_id
+                )
+                new_testfile.save()
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-        return Response({"status": "created"},
+        return Response({"status": "created", "test_file_id": new_testfile.id},
                         status=status.HTTP_201_CREATED)
