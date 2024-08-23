@@ -11,7 +11,7 @@ class Tests(models.Model):
     question_quantity = models.SmallIntegerField(verbose_name="Savollar soni", blank=False, null=False, default=20)
 
     def __str__(self):
-        return self.test_name
+        return f"{self.id}. {self.test_name}"
 
 
 class Results(models.Model):
