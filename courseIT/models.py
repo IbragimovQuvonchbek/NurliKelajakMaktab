@@ -12,9 +12,8 @@ class Student(models.Model):
     first_name = models.CharField(max_length=255, blank=False, verbose_name="Ism")
     last_name = models.CharField(max_length=255, blank=False, verbose_name="Familiya")
     grade = models.PositiveSmallIntegerField(blank=False, verbose_name="Sinf")
-    group = models.PositiveSmallIntegerField(blank=False, default=1)
-    id_unique = models.CharField(max_length=255, default=lambda: Student.generate_unique_code(), unique=True,
-                                 verbose_name="O'quvchi ID")
+    group = models.PositiveSmallIntegerField(blank=False, default=1, verbose_name="Gruh raqami")
+    id_unique = models.CharField(max_length=255, default=lambda: Student.generate_unique_code(), unique=True, verbose_name="O'quvchi ID")
 
     @staticmethod
     def generate_unique_code():
