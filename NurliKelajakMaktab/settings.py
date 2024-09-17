@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'students.apps.StudentsConfig',
     'olympia.apps.OlympiaConfig',
     'customtest.apps.CustomtestConfig',
-    'courseIT.apps.CourseitConfig',
+    'courseit.apps.CourseitConfig',
 ]
 
 MIDDLEWARE = [
