@@ -61,6 +61,7 @@ urlpatterns = [
     path('api/v1/olimpiada25082024/', include('olympia.urls')),
     path('export-all-data/', ExportAllDataView.as_view(), name='export-all-data'),
     path('api/v1/testchecker/', include('customtest.urls')),
+    path('api/v1/courseit/', include('courseIT.urls')),
     path('', admin.site.urls),
 ]
 
