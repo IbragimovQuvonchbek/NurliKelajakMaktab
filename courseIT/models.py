@@ -3,6 +3,8 @@ import random
 import string
 from datetime import datetime
 
+from numpy.ma.extras import unique
+
 
 class Student(models.Model):
     class Meta:
@@ -13,8 +15,8 @@ class Student(models.Model):
     last_name = models.CharField(max_length=255, blank=False, verbose_name="Familiya")
     grade = models.PositiveSmallIntegerField(blank=False, verbose_name="Sinf")
     group = models.PositiveSmallIntegerField(blank=False, default=1, verbose_name="Gruh raqami")
-    id_unique = models.CharField(max_length=255, default=lambda: Student.generate_unique_code(), unique=True, verbose_name="O'quvchi ID")
-
+    id_unique = models.CharField(max_length=255, default="aaaaa", unique=True,
+                                 verbose_name="O'quvchi ID")
     @staticmethod
     def generate_unique_code():
         characters = string.ascii_uppercase + string.digits
@@ -34,7 +36,7 @@ class StudentResult(models.Model):
     number_of_questions = models.PositiveSmallIntegerField(blank=False, null=False, verbose_name="Savollar soni")
     result = models.PositiveSmallIntegerField(blank=False, null=False, verbose_name="Natija")
     month = models.CharField(max_length=100, blank=False, null=False,
-                             default=lambda: StudentResult.get_current_month_in_uzbek())
+                             default="aaaaaaa")
 
     @staticmethod
     def get_current_month_in_uzbek():
